@@ -81,6 +81,7 @@ class Window(Frame):
         self.current_image = photo_image
 
     def display_info(self, ciff_image):
+        # Clear previous info
         for widget in self.info_frame.winfo_children():
             widget.destroy()
 
@@ -90,11 +91,15 @@ class Window(Frame):
         Label(self.info_frame, text=f"{ciff_image.width} x {ciff_image.height}").grid(row=1, column=1, sticky="w", pady=2)
 
         Label(self.info_frame, text="Caption:").grid(row=2, column=0, sticky="w", pady=2)
-        Label(self.info_frame, text=ciff_image.caption).grid(row=2, column=1, sticky="w", pady=2)
+        Label(self.info_frame, text=ciff_image.caption, wraplength=250, justify="left").grid(row=2, column=1, sticky="w", pady=2)
 
-        Label(self.info_frame, text="Tags:").grid(row=3, column=0, sticky="w", pady=2)
+        Label(self.info_frame, text="Tags:").grid(row=3, column=0, sticky="nw", pady=2)
+
+        # Handling long tags
+        max_tag_length = 50
         for i, tag in enumerate(ciff_image.tags):
-            Label(self.info_frame, text=tag[:-1]).grid(row=3 + i, column=1, sticky="w", pady=2)
+            truncated_tag = (tag[:max_tag_length] + "...") if len(tag) > max_tag_length else tag
+            Label(self.info_frame, text=truncated_tag, wraplength=250, justify="left").grid(row=3 + i, column=1, sticky="w", pady=2)
 
     def run_tests(self):
         test_window = Toplevel(self.master)
@@ -123,6 +128,7 @@ class Window(Frame):
                     result_text.insert(END, f"Error processing {test_vector}: {e}\n")
         except Exception as e:
             messagebox.showerror("Error", f"Failed to run tests:\n{e}")
+
 
 if __name__ == "__main__":
     root = Tk()  # Create the main Tkinter window
