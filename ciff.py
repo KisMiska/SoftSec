@@ -198,10 +198,10 @@ class CIFF:
                 bytes_read += 4
                 # decode the bytes as 4 characters
                 new_ciff.magic = magic.decode('ascii')
-                # TODO: the magic must be "CIFF". If not, raise Exception
-                #if new_ciff.magic != ____:
-                #    new_ciff.is_valid = ____
-                #    raise ____
+                # TODO: the magic must be "CIFF". If not, raise Exception -> DONE
+                if new_ciff.magic != 'CIFF':
+                    new_ciff.is_valid = False
+                    raise Exception("Invalid magic: not a CIFF")
 
                 # read the header size
                 h_size = ciff_file.read(8)
@@ -216,9 +216,10 @@ class CIFF:
                 new_ciff.header_size = struct.unpack("q", h_size)[0]
                 # the header size must be in [38, 2^64 - 1]
                 # TODO: check the value range. If not in range, raise Exception
-                #if new_ciff.header_size < ____ \
-                #        or new_ciff.header_size > ____:
-                #    ____
+                if new_ciff.header_size < 38 \
+                        or new_ciff.header_size > 2**64 - 1:
+                    new_ciff.is_valid = False
+                    raise Exception("Invalid header size: out of range")
 
                 # read the content size
                 c_size = ciff_file.read(8)
