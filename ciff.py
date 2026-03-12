@@ -275,9 +275,10 @@ class CIFF:
                     new_ciff.is_valid = False
                     raise Exception("Invalid height: out of range")
 
-                # TODO: content size must equal width*height*3
-                #if ____:
-                #    ____
+                # TODO: content size must equal width*height*3 -> DONE
+                if new_ciff.content_size != new_ciff.width * new_ciff.height * 3:
+                    new_ciff.is_valid = False
+                    raise Exception("Invalid content size: does not match width*height*3")
 
                 # read the name of the image character by character
                 caption = ""
@@ -306,30 +307,33 @@ class CIFF:
                 tag = ""
                 while bytes_read != new_ciff.header_size:
                     c = ciff_file.read(1)
-                    # TODO: check if c contains 1 byte
+                    # TODO: check if c contains 1 byte -> DONE
                     if len(c) != 1:
                         raise Exception("Invalid image")
                     bytes_read += 1
                     char = c.decode('ascii')
                     # tags should not contain '\n'
-                    # TODO: char must not be a '\n'
-                    #if ____ == ____:
-                    #    ____
+                    # TODO: char must not be a '\n' -> DONE
+                    if char == '\n':
+                        new_ciff.is_valid = False
+                        raise Exception("Invalid tag: contains newline")
                     # tags are separated by terminating nulls
                     tag += char
                     if char == '\0':
                         tags.append(tag)
                         tag = ""
                     # the very last character in the header must be a '\0'
-                    # TODO: check the last character of the header
-                    #if (bytes_read == ____) and ____:
-                    #    ____
-                
+                    # TODO: check the last character of the header -> DONE
+                    if (bytes_read == new_ciff.header_size) and char != '\0':
+                        new_ciff.is_valid = False
+                        raise Exception("Invalid header: missing terminating null")
+
                 # all tags must end with '\0'
-                # TODO: check the end of each tag for the '\0'
-                #for tag in tags:
-                #    if tag[____] != ____:
-                #        ____
+                # TODO: check the end of each tag for the '\0' -> DONE
+                for tag in tags:
+                    if tag[-1] != '\0':
+                        new_ciff.is_valid = False
+                        raise Exception("Invalid tag: missing terminating null")
 
                 new_ciff.tags = tags
                 
@@ -345,9 +349,10 @@ class CIFF:
 
                 # we should have reached the end of the file
                 # TODO: try to read a byte. If successful, raise Exception
-                #____
-                #____
-                #    ____
+                c = ciff_file.read(1)
+                if c:
+                    raise Exception("Invalid file: extra data at the end")
+
 
         except Exception as e:
             new_ciff.is_valid = False
