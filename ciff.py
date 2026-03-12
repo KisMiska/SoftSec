@@ -215,7 +215,7 @@ class CIFF:
                 # HINT: Does it fit our purposes?
                 new_ciff.header_size = struct.unpack("q", h_size)[0]
                 # the header size must be in [38, 2^64 - 1]
-                # TODO: check the value range. If not in range, raise Exception
+                # TODO: check the value range. If not in range, raise Exception -> DONE
                 if new_ciff.header_size < 38 \
                         or new_ciff.header_size > 2**64 - 1:
                     new_ciff.is_valid = False
@@ -232,11 +232,12 @@ class CIFF:
                 # HINT: Does it fit our purposes?
                 new_ciff.content_size = struct.unpack("q", c_size)[0]
                 # the content size must be in [0, 2^64 - 1]
-                # TODO: check the value range. If not in range, raise Exception
+                # TODO: check the value range. If not in range, raise Exception -> DONE
                 # Question: is this check necessary?
-                #if new_ciff.content_size < ____ or \
-                #        new_ciff.content_size > ____:
-                #    ____
+                if new_ciff.content_size < 0 or \
+                        new_ciff.content_size > 2**64 - 1:
+                    new_ciff.is_valid = False
+                    raise Exception("Invalid content size: out of range")
 
                 # read the width
                 width = ciff_file.read(8)
@@ -249,10 +250,12 @@ class CIFF:
                 # HINT: Does it fit our purposes?
                 new_ciff.width = struct.unpack("q", width)[0]
                 # the width must be in [0, 2^64 - 1]
-                # TODO: check the value range. If not in range, raise Exception
+                # TODO: check the value range. If not in range, raise Exception -> DONE
                 # Question: is this check necessary?
-                #if ____:
-                #    ____
+                if new_ciff.width < 0 or \
+                        new_ciff.width > 2**64 - 1:
+                    new_ciff.is_valid = False
+                    raise Exception("Invalid width: out of range")
 
                 # read the height
                 height = ciff_file.read(8)
@@ -265,10 +268,12 @@ class CIFF:
                 # HINT: Does it fit our purposes?
                 new_ciff.height = struct.unpack("q", height)[0]
                 # the height must be in [0, 2^64 - 1]
-                # TODO: check the value range
+                # TODO: check the value range -> DONE
                 # Question: is this check necessary?
-                #____
-                #    ____
+                if new_ciff.height < 0 or \
+                        new_ciff.height > 2**64 - 1:
+                    new_ciff.is_valid = False
+                    raise Exception("Invalid height: out of range")
 
                 # TODO: content size must equal width*height*3
                 #if ____:
