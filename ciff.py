@@ -192,9 +192,9 @@ class CIFF:
             # read the magic bytes
             magic = ciff_file.read(4)
             # read may not return the requested number of bytes
-            # TODO: magic must contain 4 bytes. If not, raise Exception
-            #if len(magic) != ____:
-            #    raise Exception(____)
+            # TODO: magic must contain 4 bytes. If not, raise Exception -> DONE
+            if len(magic) != 4:
+                raise Exception("Invalid magic: EOF")
             bytes_read += 4
             # decode the bytes as 4 characters
             new_ciff.magic = magic.decode('ascii')
@@ -205,9 +205,9 @@ class CIFF:
 
             # read the header size
             h_size = ciff_file.read(8)
-            # TODO: h_size must contain 8 bytes. If not, raise Exception
-            #if len(____) != ____:
-            #    raise ____
+            # TODO: h_size must contain 8 bytes. If not, raise Exception -> DONE
+            if len(h_size) != 8:
+                raise Exception("Invalid header size: EOF")
             bytes_read += 8
             # interpret the bytes as an 8-byte-long integer
             # unpack returns a list
@@ -222,9 +222,9 @@ class CIFF:
 
             # read the content size
             c_size = ciff_file.read(8)
-            # TODO: c_size must contain 8 bytes. If not, raise Exception
-            #if len(____) != ____:
-            #    ____
+            # TODO: c_size must contain 8 bytes. If not, raise Exception -> DONE
+            if len(c_size) != 8:
+                raise Exception("Invalid content size: EOF")
             bytes_read += 8
             # interpret the bytes as an 8-byte-long integer
             # HINT: check out the "q" format specifier!
@@ -239,9 +239,9 @@ class CIFF:
 
             # read the width
             width = ciff_file.read(8)
-            # TODO: check if width contains 8 bytes
-            #if ____ != ____:
-            #    ____
+            # TODO: check if width contains 8 bytes -> DONE
+            if len(width) != 8:
+                raise Exception("Invalid width: EOF")
             bytes_read += 8
             # interpret the bytes as an 8-byte-long integer
             # HINT: check out the "q" format specifier!
@@ -255,9 +255,9 @@ class CIFF:
 
             # read the height
             height = ciff_file.read(8)
-            # TODO: check if height contains 8 bytes
-            #if ____:
-            #    ____
+            # TODO: check if height contains 8 bytes -> DONE
+            if len(height) != 8:
+                raise Exception("Invalid height: EOF")
             bytes_read += 8
             # interpret the bytes as an 8-byte-long integer
             # HINT: check out the "q" format specifier!
@@ -276,9 +276,9 @@ class CIFF:
             # read the name of the image character by character
             caption = ""
             c = ciff_file.read(1)
-            # TODO: check if c contains 1 byte
-            #___
-            #    ____
+            # TODO: check if c contains 1 byte -> DONE
+            if len(c) != 1:
+                raise Exception("Invalid caption: EOF")
             bytes_read += 1
             char = c.decode('ascii')
             # read until the first '\n' (caption cannot contain '\n')
@@ -287,9 +287,9 @@ class CIFF:
                 caption += char
                 # read next character
                 c = ciff_file.read(1)
-                # TODO: check if c contains 1 byte
-                #___
-                #    ____
+                # TODO: check if c contains 1 byte -> DONE
+                if len(c) != 1:
+                    raise Exception("Invalid caption: EOF")
                 bytes_read += 1
                 char = c.decode('ascii')
             new_ciff.caption = caption
@@ -330,9 +330,9 @@ class CIFF:
             # read the pixels
             while bytes_read < new_ciff.header_size+new_ciff.content_size:
                 c = ciff_file.read(3)
-                # TODO: check if c contains 3 bytes
-                #___
-                #    ____
+                # TODO: check if c contains 3 bytes -> DONE
+                if len(c) != 3:
+                    raise Exception("Invalid pixels: EOF")
                 bytes_read += 3
                 pixel = struct.unpack("BBB", c)
                 new_ciff.pixels.append(pixel)
