@@ -1,4 +1,4 @@
-from ciff import CIFF
+from lab1.ciff import CIFF
 from os import listdir
 from os.path import join, extsep
 

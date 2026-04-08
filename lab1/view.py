@@ -1,6 +1,6 @@
 from tkinter import Tk, Canvas, NW, Toplevel, Text, Scrollbar, VERTICAL, filedialog, messagebox, END
 from tkinter.ttk import Frame, Label, Button
-from ciff import CIFF
+from lab1.ciff import CIFF
 from os import listdir
 from os.path import join, extsep
 from PIL import Image, ImageTk
